@@ -1,29 +1,38 @@
 import React, { Component } from 'react';
 import Main from '../components/Main'
 import { connect } from 'react-redux';
-import { defaultData, getData } from '../modules/index'
+import { getData } from '../modules/index'
+import { getItems } from '../api'
 
 class App extends Component {
   componentDidMount() {
-    this.props.dispatch(defaultData())
-  }
-  simpleAction = (event) => {
-   this.props.dispatch(getData())
+    const { dispatch } = this.props
+     dispatch(getData())
   }
   render() {
+    const { data, isLoading, isError } = this.props
+
     return (
       <div className="App">
-        <Main str={this.props.data} />
-        <button onClick={this.simpleAction}>vfecdws</button>
+        <ul>
+          { !isError ?
+            !isLoading
+            ? data.map(item => <Main key={item.height + item.mass} str={item.name} />)
+            : 'Loading...'
+            : 'Something went wrong ¯\\_(ツ)_/¯'
+          }
+        </ul>
       </div>
     );
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    data: state.data.items
-  }
-}
+const mapStateToProps = state => {
+    return {
+      data: state.data.items,
+      isLoading: state.data.isLoading,
+      isError: state.data.isError
+    }
+ }
 
 export default connect(mapStateToProps)(App);

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
 
-const Main = props => props.str
+const Main = props => <li>{ props.str } </li>
 
 export default Main
